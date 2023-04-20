@@ -5,76 +5,72 @@ import java.util.Scanner;
 
 public class B107 {
 
-    static ArrayList<Integer> cntArr = new ArrayList<>();
-    static ArrayList<int[]> cardList = new ArrayList<>();
     static int cardNum;
     static int[] cardArr;
-    static int setNum;
+    static int groupNum;
     static int shuffleCnt;
+    static ArrayList<Integer> groupNumList = new ArrayList<>();
+    static ArrayList<int[]> groupedCardList = new ArrayList<>();
 
     public static void main(String[] args) {
         try (Scanner sc = new Scanner(System.in)) {
             cardNum = sc.nextInt();
-            setNum = sc.nextInt();
+            groupNum = sc.nextInt();
             shuffleCnt = sc.nextInt();
+            cardArr = new int[cardNum];
 
             for(int i = 0 ; i < cardArr.length ; i++) {
                 cardArr[i] = i + 1;
             }
 
-            int mok = cardNum / setNum;
-            int namoge = cardNum % setNum;
+            int mok = cardNum / groupNum;
+            int namoge = cardNum % groupNum;
 
             for (int i = 0; i < mok; i++) {
-                cntArr.add(setNum);
+                groupNumList.add(groupNum);
             }
 
             if (namoge != 0) {
-                cntArr.add(namoge);
+                groupNumList.add(namoge);
             }
         }
-
-        grouping(cardArr);
 
         for (int i = 0; i < shuffleCnt; i++) {
+            makeGroup();
             shuffle();
-
-            System.out.println("================");
-            for(int[] card : cardList) {
-                for(int j = 0 ; j < card.length ; j++) {
-                    System.out.println(card[j]);
-                }
-            }
-            System.out.println("================");
         }
 
-        for(int[] card : cardList) {
-            for(int i = 0 ; i < card.length ; i++) {
-                System.out.println(card[i]);
-            }
+        for (int i = 0; i < cardArr.length; i++) {
+            System.out.println(cardArr[i]);
         }
 
     }
 
-    static void grouping(int[] cardArr) {
-        //다시 배열로 변환 해야됨
+    static void makeGroup() {
         int cardIdx = 0;
-        for (int cnt : cntArr) {
+        for (int cnt : groupNumList) {
             int[] tmpCardArr = new int[cnt];
             for (int i = 0; i < cnt; i++) {
                 tmpCardArr[i] = cardArr[cardIdx];
                 cardIdx++;
             }
-            cardList.add(tmpCardArr);
+            groupedCardList.add(tmpCardArr);
         }
     }
 
     static void shuffle() {
-        ArrayList<int[]> tmpCardList = new ArrayList<>();
-        for(int i = cardList.size() - 1; i >= 0 ; i --) {
-            tmpCardList.add(cardList.get(i));
+        ArrayList<int[]> tmpGroupedCardList = new ArrayList<>();
+        for(int i = groupedCardList.size() - 1; i >= 0 ; i --) {
+            tmpGroupedCardList.add(groupedCardList.get(i));
         }
-        cardList = tmpCardList;
+        groupedCardList = tmpGroupedCardList;
+        int cardIdx = 0;
+        for(int[] card : groupedCardList) {
+            for (int i = 0; i < card.length; i++) {
+                cardArr[cardIdx] = card[i];
+                cardIdx++;
+            }
+        }
+        groupedCardList.clear();
     }
-
 }
