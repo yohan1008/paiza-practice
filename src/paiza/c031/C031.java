@@ -1,5 +1,6 @@
 package paiza.c031;
 
+import java.time.LocalTime;
 import java.util.*;
 
 /**
@@ -17,6 +18,11 @@ import java.util.*;
 
 public class C031 {
 
+    //----------------------------------------------------------------
+    //・指摘事項
+    //副作用を起こさずにローカル変数だけで使用する場合はクラスフィル―ドに変数定義は出来ればしないこと。
+    //無駄にクラスフィールドで定義をしてしまうと予期しない部分で値が更新されたりして動作に影響を与えてしまう。
+    //----------------------------------------------------------------
     //各都市の総数
     static int cityNum;
     //各都市の標準時刻からの進み
@@ -25,10 +31,6 @@ public class C031 {
     static String cityName;
     //投稿を行ったユーザの現地での投稿時刻
     static String cityTime;
-    //標準時刻の時間
-    static int standardTimeHour;
-    //標準時刻の分
-    static String standardTimeMin;
 
     public static void main(String[] args) {
 
@@ -51,34 +53,8 @@ public class C031 {
         //------------------------------------------------------------
         // 処理及び出力
         //------------------------------------------------------------
-        //標準時刻を求める
-        calcStandardTime();
         //各都市の投稿時間を求めて出力する
         calcAndPrintPostTime();
-    }
-
-    /**
-     * 標準時刻を計算する。
-     *
-     * @author kang yohan
-     */
-    static void calcStandardTime() {
-        //標準時刻を計算するために投稿時刻の時間をIntegerに変換
-        int cityHourInt = Integer.parseInt(cityTime.substring(0, 2));
-
-        //ユーザーの投稿時刻を使用して標準時刻の時間を計算
-        standardTimeHour = cityHourInt - cityTimeDiffes.get(cityName);
-        //24時間制に変換する
-        if (standardTimeHour >= 24) {
-            //24以上の場合
-            standardTimeHour = standardTimeHour - 24;
-        } else if (standardTimeHour < 0) {
-            //0より小さい場合
-            standardTimeHour = standardTimeHour + 24;
-        }
-
-        //標準時刻の分を求める（最終的に出力するだけなので処理は不要）
-        standardTimeMin = cityTime.substring(3, cityTime.length());
     }
 
     /**
@@ -86,24 +62,25 @@ public class C031 {
      *
      * @author kang yohan
      */
+    //-------------------------------------------------------------
+    //・指摘事項
+    //日付の計算はLocalTimeクラスを使うことで簡単に実現が可能になる
+    //またインスタンスを生成せずに実行した方がメモリ消費なども少なくなる
+    //paizaなどのコーディングテストなどでは有利になる
+    //-------------------------------------------------------------
     static void calcAndPrintPostTime() {
+        //標準時間を計算するため文字列で入力された時間をLocalTimeオブジェクトに変換する
+        LocalTime inputTime = LocalTime.of(Integer.parseInt(cityTime.substring(0, 2)), Integer.parseInt(cityTime.substring(3, cityTime.length())));
+
+        //ユーザーの投稿時刻にその都市の標準時間からの進みをマイナスして標準時刻の時間を計算
+        LocalTime standardTime = inputTime.plusHours(-cityTimeDiffes.get(cityName));
+
         for (String key : cityTimeDiffes.keySet()) {
             //標準時刻に標準時刻からの進みを足しての各都市の投稿時刻を計算する
-            int citiesHourInt = standardTimeHour + cityTimeDiffes.get(key);
+            LocalTime localTime = standardTime.plusHours(cityTimeDiffes.get(key));
 
-            //24時間制に変換する
-            if (citiesHourInt >= 24) {
-                //24以上の場合
-                citiesHourInt = citiesHourInt - 24;
-            } else if (citiesHourInt < 0) {
-                //0よりも小さい場合
-                citiesHourInt = citiesHourInt + 24;
-            }
-
-            //時が10より小さい場合は出力のため0をつける
-            String citiesHourStr = citiesHourInt < 10 ? "0" + citiesHourInt : Integer.toString(citiesHourInt);
-            //答えの出力
-            System.out.println(citiesHourStr + ":" + standardTimeMin);
+            //LocalTimeオブジェクトの時刻を文字列で出力する
+            System.out.println(localTime.toString());
         }
     }
 }
