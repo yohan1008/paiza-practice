@@ -24,6 +24,9 @@ public class B107 {
     static ArrayList<int[]> groupedCardList = new ArrayList<>();
 
     public static void main(String[] args) {
+        //-----------------------------------------
+        //入力
+        //-----------------------------------------
         try (Scanner sc = new Scanner(System.in)) {
             //カードの枚数を取得
             int cardNum = sc.nextInt();
@@ -53,6 +56,9 @@ public class B107 {
             }
         }
 
+        //-----------------------------------------
+        //処理
+        //-----------------------------------------
         for (int i = 0; i < shuffleCnt; i++) {
             //グループ化をする
             makeGroup();
@@ -60,6 +66,9 @@ public class B107 {
             shuffle();
         }
 
+        //-----------------------------------------
+        //出力
+        //-----------------------------------------
         for (int card : cardArr) {
             //最終的にシャッフルが終わったカードを出力する
             System.out.println(card);
