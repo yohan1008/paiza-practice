@@ -1,5 +1,6 @@
 package paiza.b107;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
@@ -14,14 +15,15 @@ import java.util.Scanner;
  * @author kang yohan
  */
 public class B107 {
+
+    //カードの枚数
+    static int cardNum;
+    //グループの枚数
+    static int groupCardNum;
     //カード
     static int[] cardArr;
     //シャッフルの回数
     static int shuffleCnt;
-    //グループの枚数
-    static ArrayList<Integer> groupNumList = new ArrayList<>();
-    //グループ化されたカード
-    static ArrayList<int[]> groupedCardList = new ArrayList<>();
 
     public static void main(String[] args) {
         //-----------------------------------------
@@ -29,9 +31,9 @@ public class B107 {
         //-----------------------------------------
         try (Scanner sc = new Scanner(System.in)) {
             //カードの枚数を取得
-            int cardNum = sc.nextInt();
+            cardNum = sc.nextInt();
             //グループの枚数を取得
-            int groupCardNum = sc.nextInt();
+            groupCardNum = sc.nextInt();
             //シャッフルの回数を取得
             shuffleCnt = sc.nextInt();
             //カードを取得
@@ -39,21 +41,24 @@ public class B107 {
             for (int i = 0; i < cardArr.length; i++) {
                 cardArr[i] = i + 1;
             }
+        }
 
-            //グループ数と余ったカードの枚数を計算
-            //カード / 各グループの枚数　= 必ず存在するグループ数
-            int mainGroupNum = cardNum / groupCardNum;
-            //カード % 各グループの枚数　= グループ化をした後、残りのカード枚数
-            int remainGroupCardNum = cardNum % groupCardNum;
+        //グループ数と余ったカードの枚数を計算
+        //カード / 各グループの枚数　= 必ず存在するグループ数
+        int mainGroupNum = cardNum / groupCardNum;
+        //カード % 各グループの枚数　= グループ化をした後、残りのカード枚数
+        int remainGroupCardNum = cardNum % groupCardNum;
 
-            //各グループの枚数を格納
-            for (int i = 0; i < mainGroupNum; i++) {
-                groupNumList.add(groupCardNum);
-            }
+        //グループの枚数
+        ArrayList<Integer> groupNumList = new ArrayList<>();
 
-            if (remainGroupCardNum != 0) {
-                groupNumList.add(remainGroupCardNum);
-            }
+        //各グループの枚数を格納
+        for (int i = 0; i < mainGroupNum; i++) {
+            groupNumList.add(groupCardNum);
+        }
+
+        if (remainGroupCardNum != 0) {
+            groupNumList.add(remainGroupCardNum);
         }
 
         //-----------------------------------------
@@ -61,9 +66,9 @@ public class B107 {
         //-----------------------------------------
         for (int i = 0; i < shuffleCnt; i++) {
             //グループ化をする
-            makeGroup();
+            ArrayList<int[]> groupedCardList = makeGroup(groupNumList);
             //シャッフルをする
-            shuffle();
+            shuffle(groupedCardList);
         }
 
         //-----------------------------------------
@@ -78,8 +83,13 @@ public class B107 {
 
     /**
      * グループ化を行う。
+     *
+     * @param groupNumList
+     * @return
      */
-    static void makeGroup() {
+    static ArrayList<int[]> makeGroup(ArrayList<Integer> groupNumList) {
+        //グループ化されたカード
+        ArrayList<int[]> groupedCardList = new ArrayList<>();
         //カードのインデックス
         int cardIdx = 0;
         //各グループの枚数通りに配列を作り格納する
@@ -91,12 +101,16 @@ public class B107 {
             }
             groupedCardList.add(tmpCardArr);
         }
+
+        return groupedCardList;
     }
 
     /**
-     * シャッフルを行う
+     * シャッフルを行う。
+     *
+     * @param groupedCardList
      */
-    static void shuffle() {
+    static void shuffle(ArrayList<int[]> groupedCardList) {
         //グループ前後の反転を行う
         Collections.reverse(groupedCardList);
         int cardIdx = 0;
@@ -107,7 +121,5 @@ public class B107 {
                 cardIdx++;
             }
         }
-        //次のグループ化されたカードを保持するためにクリアさせる
-        groupedCardList.clear();
     }
 }
