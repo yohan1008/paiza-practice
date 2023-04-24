@@ -23,23 +23,22 @@ public class C031 {
     //副作用を起こさずにローカル変数だけで使用する場合はクラスフィル―ドに変数定義は出来ればしないこと。
     //無駄にクラスフィールドで定義をしてしまうと予期しない部分で値が更新されたりして動作に影響を与えてしまう。
     //----------------------------------------------------------------
-    //各都市の総数
-    static int cityNum;
-    //各都市の標準時刻からの進み
-    static Map<String, Integer> cityTimeDiffes = new LinkedHashMap<>();
-    //投稿を行ったユーザの所在地の都市名
-    static String cityName;
-    //投稿を行ったユーザの現地での投稿時刻
-    static String cityTime;
 
     public static void main(String[] args) {
 
         //------------------------------------------------------------
         // 入力
         //------------------------------------------------------------
+        //各都市の標準時刻からの進み
+        Map<String, Integer> cityTimeDiffes = new LinkedHashMap<>();
+        //投稿を行ったユーザの所在地の都市名
+        String cityName;
+        //投稿を行ったユーザの現地での投稿時刻
+        String cityTime;
+
         try (Scanner sc = new Scanner(System.in)) {
             //各都市の総数を取得
-            cityNum = sc.nextInt();
+            int cityNum = sc.nextInt();
             //各都市の標準時刻からの進みを取得
             for (int i = 0; i < cityNum; i++) {
                 cityTimeDiffes.put(sc.next(), sc.nextInt());
@@ -54,7 +53,7 @@ public class C031 {
         // 処理及び出力
         //------------------------------------------------------------
         //各都市の投稿時間を求めて出力する
-        calcAndPrintPostTime();
+        calcAndPrintPostTime(cityTimeDiffes, cityName, cityTime);
     }
 
     /**
@@ -68,7 +67,7 @@ public class C031 {
     //またインスタンスを生成せずに実行した方がメモリ消費なども少なくなる
     //paizaなどのコーディングテストなどでは有利になる
     //-------------------------------------------------------------
-    static void calcAndPrintPostTime() {
+    static void calcAndPrintPostTime(Map<String, Integer> cityTimeDiffes, String cityName, String cityTime) {
         //標準時間を計算するため文字列で入力された時間をLocalTimeオブジェクトに変換する
         LocalTime inputTime = LocalTime.of(Integer.parseInt(cityTime.substring(0, 2)), Integer.parseInt(cityTime.substring(3, cityTime.length())));
 
