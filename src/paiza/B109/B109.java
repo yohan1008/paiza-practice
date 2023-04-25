@@ -30,6 +30,7 @@ public class B109 {
             for (int i = 0; i < reservedSeatNum; i++) {
                 allSeat[sc.nextInt()][sc.nextInt()] = 1;
             }
+
         }
 
         Map<Integer, Integer> mostPlace = calcManhattanDistance(allSeat);
@@ -41,15 +42,22 @@ public class B109 {
     }
 
     static Map<Integer, Integer> calcManhattanDistance(int[][] allSeat) {
-        int min = allSeat.length + allSeat[1].length;
+        int min = (allSeat.length - 1) + (allSeat[1].length - 1);
         Map<Integer, Integer> mostPlace = new HashMap<>();
         for (int i = 0; i < allSeat.length; i++) {
             for (int j = 0; j < allSeat[i].length; j++) {
+                System.out.println("i : " + i + ", j : " + j + ", min : " + min);
+
                 if (allSeat[i][j] == 1) {
+                    System.out.println(i + ", " + j + " SKIP");
                     continue;
                 }
 
+                System.out.println("+++++++++++++++++++");
+
                 int tmpMin = Math.abs(p - i) + Math.abs(q - j);
+
+                System.out.println("tmpMin : " + tmpMin);
 
                 if (tmpMin < min) {
                     min = tmpMin;
@@ -58,6 +66,8 @@ public class B109 {
                 } else if (tmpMin == min) {
                     mostPlace.put(i, j);
                 }
+
+                System.out.println("--------------------------------------");
             }
         }
 
