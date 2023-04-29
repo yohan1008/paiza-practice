@@ -4,7 +4,7 @@ import java.util.*;
 
 public class B109 {
 
-    static int[][] allSeat;
+    static boolean[][] allSeat;
 
     static int p;
 
@@ -15,7 +15,7 @@ public class B109 {
         try (Scanner sc = new Scanner(System.in)) {
             int reservedSeatNum = sc.nextInt();
 
-            allSeat = new int[sc.nextInt()][sc.nextInt()];
+            allSeat = new boolean[sc.nextInt()][sc.nextInt()];
 
             p = sc.nextInt();
 
@@ -23,12 +23,12 @@ public class B109 {
 
             for (int i = 0; i < allSeat.length; i++) {
                 for (int j = 0; j < allSeat[i].length; j++) {
-                    allSeat[i][j] = 0;
+                    allSeat[i][j] = false;
                 }
             }
 
             for (int i = 0; i < reservedSeatNum; i++) {
-                allSeat[sc.nextInt()][sc.nextInt()] = 1;
+                allSeat[sc.nextInt()][sc.nextInt()] = true;
             }
 
         }
@@ -41,14 +41,14 @@ public class B109 {
 
     }
 
-    static Map<Integer, Integer> calcManhattanDistance(int[][] allSeat) {
+    static Map<Integer, Integer> calcManhattanDistance(boolean[][] allSeat) {
         int min = (allSeat.length - 1) + (allSeat[1].length - 1);
         Map<Integer, Integer> mostPlace = new HashMap<>();
         for (int i = 0; i < allSeat.length; i++) {
             for (int j = 0; j < allSeat[i].length; j++) {
                 System.out.println("i : " + i + ", j : " + j + ", min : " + min);
 
-                if (allSeat[i][j] == 1) {
+                if (allSeat[i][j]) {
                     System.out.println(i + ", " + j + " SKIP");
                     continue;
                 }
