@@ -30,44 +30,38 @@ public class B109 {
             for (int i = 0; i < reservedSeatNum; i++) {
                 allSeat[sc.nextInt()][sc.nextInt()] = true;
             }
-
         }
 
-        Map<Integer, Integer> mostPlace = calcManhattanDistance(allSeat);
-
-        for (int i : mostPlace.keySet()) {
-            System.out.println(i + " " + mostPlace.get(i));
+        if (allSeat[p][q]) {
+            List<int[]> mostPlace = calcManhattanDistance(allSeat);
+            for (int[] seat : mostPlace) {
+                System.out.println(seat[0] + " " + seat[1]);
+            }
+        } else {
+            System.out.println(p + " " + q);
         }
 
     }
 
-    static Map<Integer, Integer> calcManhattanDistance(boolean[][] allSeat) {
+    static List<int[]> calcManhattanDistance(boolean[][] allSeat) {
         int min = (allSeat.length - 1) + (allSeat[1].length - 1);
-        Map<Integer, Integer> mostPlace = new HashMap<>();
+        List<int[]> mostPlace = new ArrayList<>();
         for (int i = 0; i < allSeat.length; i++) {
             for (int j = 0; j < allSeat[i].length; j++) {
-                System.out.println("i : " + i + ", j : " + j + ", min : " + min);
 
                 if (allSeat[i][j]) {
-                    System.out.println(i + ", " + j + " SKIP");
                     continue;
                 }
 
-                System.out.println("+++++++++++++++++++");
-
                 int tmpMin = Math.abs(p - i) + Math.abs(q - j);
-
-                System.out.println("tmpMin : " + tmpMin);
 
                 if (tmpMin < min) {
                     min = tmpMin;
                     mostPlace.clear();
-                    mostPlace.put(i, j);
+                    mostPlace.add(new int[]{i, j});
                 } else if (tmpMin == min) {
-                    mostPlace.put(i, j);
+                    mostPlace.add(new int[]{i, j});
                 }
-
-                System.out.println("--------------------------------------");
             }
         }
 
